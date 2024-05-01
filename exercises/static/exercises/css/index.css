@@ -1,0 +1,70 @@
+.st0{
+    fill:#EEEEEE;
+    stroke:#000000;
+    stroke-linejoin:round;
+    stroke-miterlimit:1.4142;
+}
+
+#front-muscles > path:hover{
+    fill:rgb(255, 0, 0);
+    cursor: pointer;
+}
+
+.front-person svg{
+    min-height: 50rem;
+}
+
+
+
+.result-item {
+    cursor: pointer; /* Optional: Change cursor to pointer when hovering over results */
+}
+
+.result-item:hover {
+    background-color: #f0f0f0; /* Optional: Change background color on hover */
+}
+
+#search-result {
+    position: fixed;
+    z-index: 999; 
+
+    padding: 10px;
+    width: 40%;
+    max-height: 30%;
+    overflow-y: auto; 
+} 
+
+.list-group-item{
+    cursor:pointer;
+}
+.list-group-item:hover{
+    background-color:rgb(230, 230, 230);
+}
+
+.table-item{
+    cursor: pointer;
+}
+
+/* Training */
+
+.training{
+    width: 100%;
+    height: auto;
+    max-height: 45rem;
+    height: 45rem;
+    background-color: #ffffff;
+}
+
+.test{
+    color: white;
+    width:6rem;
+    background-color: red;
+}
+.test > .nav >  .nav-item > a{
+    color:white;
+}
+
+.exercises{
+    width: 100%;
+    overflow-y: auto;
+}

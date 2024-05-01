@@ -1,0 +1,48 @@
+
+{% load static %}
+
+{{ body_part|json_script:"body-part" }}
+<div class="input-group flex-nowrap mx-auto mb-2">
+    <span class="input-group-text" id="inputGroup-sizing-sm">{{body_part}}</span>
+
+    <input id="input-ex" type="text" class="form-control" placeholder="Exercise" aria-label="Exercise" aria-describedby="addon-wrapping" style="width:50%">
+    <input id="input-reps" type="number" class="form-control" placeholder="Reps" aria-label="Reps" style="width:30%">
+    <input id="input-sets" type="number" class="form-control" placeholder="Sets" aria-label="Sets" style="width:30%">
+    <input id="input-kg" type="number" class="form-control" placeholder="KG" aria-label="KG" style="width:30%">
+    
+    <button id="add-ex"type="button" class="btn btn-primary">+</button>
+</div>
+
+<ul id="search-result" class="list-group  m-0">
+</ul>
+
+<hr>
+<div>
+    <div class="" id="response">
+    </div>
+</div>
+
+ <div class="title">
+    <h5 class="text-center fw-bold" >Added:</h5>
+</div> 
+
+
+<table id="exercises" class="table table-hover">
+    <thead>
+      <tr class="text-center">
+        <th scope="col">Exercise</th>
+        <th scope="col">Sets</th>
+        <th scope="col">Reps</th>
+        <th scope="col">KG</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr class="text-center table-item">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td> 
+        </tr>
+    </tbody>
+  </table>
+
