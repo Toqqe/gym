@@ -16,13 +16,13 @@
 
 
 
-.result-item {
-    cursor: pointer; /* Optional: Change cursor to pointer when hovering over results */
+/* .result-item {
+    cursor: pointer; 
 }
 
 .result-item:hover {
-    background-color: #f0f0f0; /* Optional: Change background color on hover */
-}
+    background-color: #f0f0f0; 
+} */
 
 #search-result {
     position: fixed;
@@ -51,20 +51,62 @@
     width: 100%;
     height: auto;
     max-height: 45rem;
+    min-height: 45rem;
     height: 45rem;
     background-color: #ffffff;
 }
 
-.test{
+/* Days */
+.days{
     color: white;
-    width:6rem;
-    background-color: red;
+    width:8rem;
+    background-color: rgb(65, 65, 65);
+    overflow: hidden;
 }
-.test > .nav >  .nav-item > a{
+
+.days > .nav >  .nav-item > a{
     color:white;
 }
+
+/* Exercises */
+
 
 .exercises{
     width: 100%;
     overflow-y: auto;
+    --sb-track-color: #ffffff;
+    --sb-thumb-color: #8a8a8a;
+    --sb-size: 8px;
+  }
+  
+/* Table */
+.table-responsive{
+    min-height: 44rem;
+}
+
+/* Scrollbar */
+.exercises::-webkit-scrollbar {
+    width: var(--sb-size);
+}
+
+.exercises::-webkit-scrollbar-track {
+    background: var(--sb-track-color);
+    border-radius: 11px;
+}
+
+.exercises::-webkit-scrollbar-thumb {
+    background: var(--sb-thumb-color);
+    border-radius: 11px;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+    .exercises {
+        scrollbar-color: var(--sb-thumb-color)
+                        var(--sb-track-color);
+}
+}
+
+/* Exercise menu */
+.dropdown-item{
+    cursor: pointer;
 }

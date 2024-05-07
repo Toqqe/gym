@@ -13,19 +13,22 @@ from exercises.models import BodyPart, Exercises, UserExercise
 def index(request):
     curr_user = request.user
     ## Add user etc.
+    
+    
     today = timezone.now().date()
-    exercise_dates = UserExercise.objects.values('created__date').annotate(count_ex=Count('id')).order_by('created__date') 
+    
+    exercise_dates = UserExercise.objects.filter(user=curr_user).values('created__date').annotate(count_ex=Count('id')).order_by('created__date') 
 
     user_ex = {}
     for entry in exercise_dates:
         date = entry['created__date'] # 2024-04-29
-        #print(timezone.now().date()) # 2024-04-30
-        if date != today:
-            user_ex[date] = [] ## Empty list for today
+        
         exercises = UserExercise.objects.filter(created__date=date)
         exercise_list = [ex for ex in exercises]
         user_ex[date] = exercise_list
-
+        
+    if today not in user_ex.keys():
+        user_ex[today] = []
         
     context = {
         "user_ex_dict" : user_ex
@@ -69,7 +72,7 @@ def add_exercise(request):
         if check_exercise:
             new_user_exercise = UserExercise(user=request.user, exercise=check_exercise ,sets=inputSets, reps=inputReps, kg=inputKG)
             new_user_exercise.save()
-            return JsonResponse({'success': True, 'message': 'Exercise added to user!'})
+            return JsonResponse({'success': True, 'message': 'Exercise added to user!', 'exercise_id' : new_user_exercise.id})
 
         
         new_exercise = Exercises(name=inputExercise, user=user ,part=part) #, sets=inputSets, reps=inputReps)
