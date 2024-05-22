@@ -5,15 +5,15 @@
     stroke-miterlimit:1.4142;
 }
 
-#front-muscles > path:hover{
-    fill:rgb(255, 0, 0);
+#back-muscles > path:hover,#front-muscles > path:hover{
+    transition: 0.5s;
+    fill:#78A1BB;
     cursor: pointer;
 }
 
-.front-person svg{
-    min-height: 50rem;
+.transition {
+    transition: opacity 0.5s ease-in-out;
 }
-
 
 
 /* .result-item {
@@ -27,9 +27,10 @@
 #search-result {
     position: fixed;
     z-index: 999; 
+    padding-top: .5rem;
+    
+    
 
-    padding: 10px;
-    width: 40%;
     max-height: 30%;
     overflow-y: auto; 
 } 
@@ -48,11 +49,11 @@
 /* Training */
 
 .training{
+    overflow: hidden;
     width: 100%;
     height: auto;
-    max-height: 45rem;
-    min-height: 45rem;
-    height: 45rem;
+    max-height: 40rem;
+    min-height: 40rem;
     background-color: #ffffff;
 }
 
@@ -60,14 +61,16 @@
 .days{
     color: white;
     width:8rem;
-    background-color: rgb(65, 65, 65);
+    background-color: #252323;
     overflow: hidden;
 }
 
 .days > .nav >  .nav-item > a{
     color:white;
 }
-
+.days > .nav{
+    width: 100%;
+}
 /* Exercises */
 
 
@@ -78,10 +81,14 @@
     --sb-thumb-color: #8a8a8a;
     --sb-size: 8px;
   }
-  
+.tab-content{
+    height: 100%;
+}
 /* Table */
 .table-responsive{
-    min-height: 44rem;
+    min-height: 39.5rem;
+    overflow: hidden;
+
 }
 
 /* Scrollbar */
@@ -109,4 +116,26 @@
 /* Exercise menu */
 .dropdown-item{
     cursor: pointer;
+}
+
+/* Exercise menu */
+.form-control{
+    width: 100%;
+    border:none;
+}
+
+.form-control:focus {
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(196, 196, 196, 0.6);
+}
+
+.form-floating{
+    border-bottom:1px solid #d6d6d6 ;
+}
+
+.form-floating:last-child{
+    border-bottom:none !important;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link{
+    background-color: #78A1BB;
 }

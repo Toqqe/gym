@@ -2,6 +2,9 @@ body {
     font-family: "Jost", sans-serif;
     font-weight: 400 !important;
 }
+/* header, footer{
+    height: 60px;
+} */
 
 footer{
     background-color: rgb(58, 58, 58);

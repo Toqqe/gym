@@ -1,0 +1,26 @@
+
+{% load static %}
+{% load custom_filters %}
+{{ exercise.exercise.part.name|json_script:"body-part" }}
+
+<p class="fw-bold text-center fs-4">Edit - {{exercise.exercise.part.name | title | replace:"_"}}</p>
+
+<div class="form">
+    <div class="form-floating">
+    <input type="text" min="1" class="form-control" id="input-ex" value="{{exercise.exercise}}" placeholder="Pushups" disabled>
+    <label for="input-ex">Exercise</label>
+
+    </div>
+    <div class="form-floating">
+    <input type="number" min="1" class="form-control" id="input-reps" value="{{exercise.reps}}" placeholder="Reps">
+    <label for="input-reps">Reps</label>
+    </div>
+    <div class="form-floating">
+    <input type="number" min="1" class="form-control" id="input-sets" value="{{exercise.sets}}" placeholder="Sets">
+    <label for="input-sets">Sets</label>
+    </div>
+    <div class="form-floating">
+    <input type="number" min="1" class="form-control" id="input-kg" value="{{exercise.kg}}" placeholder="KG">
+    <label for="input-kg">KG</label>
+    </div>
+</div>

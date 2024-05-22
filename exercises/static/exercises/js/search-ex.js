@@ -16,10 +16,12 @@ async function loadExercises(){
 
 function searchExercise(){
     const inputExercise = document.getElementById('input-ex');
+    
+
     inputExercise.addEventListener("input", (input) => {
         const searchText = input.target.value.toLowerCase();
         inputExercise.style.borderColor = '#dee2e6';
-        if(searchText === ''){
+        if(searchText === '' ){
             clearResults();
             return;
         }
@@ -27,11 +29,15 @@ function searchExercise(){
         const filteredData = searchData.exercises.filter(item => {
             return item.toLowerCase().includes(searchText);
         })
-        displayResults(filteredData);
+        displayResults(filteredData, inputExercise);
     });
 };
 
-function displayResults(results) {
+function displayResults(results, inputExercise) {
+    if (document.activeElement !== inputExercise) {
+        clearResults();
+        return;
+    }
     const resultsContainer = document.getElementById('search-result');
 
     resultsContainer.innerHTML = '';

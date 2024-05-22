@@ -8,13 +8,16 @@ from django.views import View
 from django.http import JsonResponse
 # Create your views here.
 
-from exercises.models import BodyPart, Exercises, UserExercise
+from exercises.models import BodyPart, Exercises
+from account.models import UserExercise, Training
 
 def index(request):
+    
+    ## For anonymouseusers
+    # request.session.save()
+    # session_key = request.session.session_key || to add
+    
     curr_user = request.user
-    ## Add user etc.
-    
-    
     today = timezone.now().date()
     
     exercise_dates = UserExercise.objects.filter(user=curr_user).values('created__date').annotate(count_ex=Count('id')).order_by('created__date') 
@@ -37,6 +40,7 @@ def index(request):
     return render(request, "exercises/index.html", context)
 
 def choosed_part_modal(request, part):
+    
     modal_template = "exercises/modal/part_modal_items.html"
     body_part = BodyPart.objects.filter(name=part).first()
     
@@ -52,7 +56,7 @@ def choosed_part_modal(request, part):
 def add_exercise(request):
     ## b'{"inputExercise":"d","bodyPart":"abs_obliques","inputReps":"1"}'
     
-    if request.method == 'POST':
+    if request.method == 'POST' and request.user.is_authenticated:
         try:
             data = json.loads(request.body)
             ## DATA
@@ -66,25 +70,86 @@ def add_exercise(request):
             return JsonResponse({'error': 'Invalid JSON'}, status=400)
         
         user = request.user
+        today = timezone.now()
         part = BodyPart.objects.filter(name=bodyPart).first()
-        check_exercise = Exercises.objects.filter(name__iexact=inputExercise, part__name=bodyPart).first()
-        print(check_exercise)
-        if check_exercise:
-            new_user_exercise = UserExercise(user=request.user, exercise=check_exercise ,sets=inputSets, reps=inputReps, kg=inputKG)
-            new_user_exercise.save()
-            return JsonResponse({'success': True, 'message': 'Exercise added to user!', 'exercise_id' : new_user_exercise.id})
+        
+        new_exercise = Exercises.objects.filter(name__iexact=inputExercise, part__name=bodyPart).first()
+        today_training = Training.objects.filter(user=user, created__date=today.date()).first()
+        
+        if today_training is None:
+            today_training = Training.objects.create(user=user, created=today)
+        
+        if not new_exercise:
+            new_exercise = Exercises(name=inputExercise, user=user ,part=part) 
+            new_exercise.save()
 
-        
-        new_exercise = Exercises(name=inputExercise, user=user ,part=part) #, sets=inputSets, reps=inputReps)
-        new_exercise.save()
-        
+
         new_user_exercise = UserExercise(user=request.user, exercise=new_exercise, sets=inputSets, reps=inputReps, kg=inputKG)
         new_user_exercise.save()
+        today_training.exercises.add(new_user_exercise)
         
         return JsonResponse({
             'success':True,
-            'message':'Exercise created and added to user!'
+            'message':'Exercise created and added to user!',
+            'exercise_id':new_user_exercise.id
         })
+        
+def get_exercise(request, id):
+    modal_template = "exercises/modal/edit_modal_item.html"
+    exercise = UserExercise.objects.get(id=id)
+
+    context = {
+        "exercise": exercise,
+    }
+    
+    return render(request, modal_template, context)
+    
+def edit_exercise(request):
+    
+    if request.method == "POST" and request.user.is_authenticated:
+        try:
+            data = json.loads(request.body)
+            idExercise = data.get('idExercise')
+            inputReps = data.get('inputReps')
+            inputSets = data.get('inputSets')
+            inputKG = data.get('inputKG')
+        except json.JSONDecodeError:
+            return JsonResponse({'error":"Invalid JSON'}, status=400)
+        
+        exercise = UserExercise.objects.get(id = idExercise)
+        
+        if exercise.user == request.user:
+            exercise.reps = inputReps
+            exercise.sets = inputSets
+            exercise.kg = inputKG
+            exercise.save()
+        else:
+            return JsonResponse({'error":"Invalid user'}, status=400)
+        
+        return JsonResponse({
+            'success':True,
+            'message': "Exercise updated!"
+            })
+        
+def delete_exercise(request):
+    if request.method == "POST" and request.user.is_authenticated:
+        try:
+            data = json.loads(request.body)
+            idExercise = data.get('idExercise')
+        except json.JSONDecodeError:
+            return JsonResponse({'error":"Invalid JSON'}, status=400)
+        
+        exercise = UserExercise.objects.get(id = idExercise)
+        
+        if exercise.user == request.user:
+            exercise.delete()
+        else:
+            return JsonResponse({'error":"Invalid user'}, status=400)
+        
+        return JsonResponse({
+            'success':True,
+            'message': "Exercise deleted!"
+            })
         
 def search_exercises(request, query):
     body_part = BodyPart.objects.filter(name=query).first()

@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% load static %}
+{% block page_css_files %}
+<link rel="stylesheet" href="{% static 'account/css/account.css' %}">
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+
+{% endblock  %}
+
+{% block page_title %}
+{% endblock  %}
+
+
+{% block page_content %}
+
+<svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+  <symbol id="list">
+    <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+  </symbol>
+</svg>
+
+
+<div class="container-fluid" >
+  <div class="row" >
+      <div id="sidebarMenu"  class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+        <div class="position-sticky">
+          <ul class="list-unstyled ps-0">
+            <div class="d-flex flex-column" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+
+              {% for training in trainings_month %}
+                <a href="{% url "training" training.id %}">
+                    <div class="btn-toggle-month d-inline-flex rounded border-0{% if training.id == training_id %} active{% endif %}" data-bs-toggle="pill">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="16" fill="currentColor" class="bi bi-calendar-fill mx-2 ">
+                            <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V5h16V4H0V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5"/>
+                        </svg>  
+                        <div class="month-text d-flex w-100 mx-1">
+                            <div>{{training.created | date:"d-M-Y"}}</div>
+                        </div>
+                    </div>
+                </a> 
+              {% endfor %}
+            </div>
+
+            <li class="border-top my-3"></li>
+            <li class="mb-1">
+              <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
+                Account
+              </button>
+              <div class="collapse" id="account-collapse">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                  <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Settings</a></li>
+                  <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Sign out</a></li>
+                </ul>
+              </div>
+            </li> 
+          </ul>
+        </div>
+      </div>
+
+      <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4 values">        
+        <div class="table-responsive mx-auto">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Exercise</th>
+                    <th scope="col">Sets</th>
+                    <th scope="col">Reps</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody id="exercise-table-body">
+                      {% for value in training.exercises.all  %}
+                        <tr class="align-middle">
+                            <td id="exercise">{{value.exercise}}</td>
+                            <td id="sets">{{value.sets}}</td>
+                            <td id="reps">{{value.reps}}</td>
+                            <td id="kgs">{{value.kg}}kg</td>
+                            <td>
+                                <div class="dropdown">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
+                                    </svg>
+                                    <ul class="dropdown-menu">
+                                        <li class="dropdown-item" id="edit-record" data-value="{{value.id}}" data-bs-toggle="modal" data-bs-target="#editModal">Edit</li>
+                                        <li class="dropdown-item" id="delete-record" data-value="{{value.id}}">Delete</li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                      {% endfor %}
+                </tbody>
+            </table>
+        </div>
+      </div>
+  </div>
+
+</div>
+
+
+{% include "exercises/modal/edit_modal.html" %}
+{% include "exercises/toast/delete_toast.html" %}
+
+<script src="{% static "exercises/js/get-input-values.js" %}"></script>
+<script src="{% static "exercises/js/search-ex.js" %}"></script>
+<script src="{% static "exercises/js/delete-ex.js" %}"></script>
+<script src="{% static "exercises/js/edit-ex.js" %}"></script>
+
+
+{% endblock  %}
